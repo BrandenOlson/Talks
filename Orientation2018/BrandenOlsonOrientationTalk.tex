@@ -225,7 +225,9 @@ Fred Hutchinson Cancer Research Center
 \bigskip
 \item B.S./M.S. in Applied Math at CU Boulder
 \bigskip
-\item Currently a 3rd-year Ph.D. student
+\item Moved to Seattle in 2016 to start the Ph.D.
+\bigskip
+\item Going into my 3rd year
 \end{itemize}
 \end{minipage}
 \begin{minipage}{0.49\linewidth}
@@ -246,11 +248,11 @@ Fred Hutchinson Cancer Research Center
 \begin{minipage}{0.49\linewidth}
 \begin{itemize}
 \bigskip
-\item R.A. for Erick Matsen's group at the Fred Hutch
+\item R.A. in Erick Matsen's group at the Fred Hutch
 \bigskip
 \item We develop methods to analyze DNA sequences
 \bigskip
-\item Computational phylogenetics \& immunology
+\item Interdisciplinary team: Biologists, mathematicians, computer scientists, and statisticians
 \end{itemize}
 \end{minipage}
 \begin{minipage}{0.49\linewidth}
@@ -349,6 +351,25 @@ T cell receptor
 
 \section{Repertoire summaries and comparisons}
 
+\begin{frame}\frametitle{The formation of BCRs and TCRs}
+\begin{center}
+\includegraphics[width=\linewidth]{Images/BCRFormation.png}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{Adaptive immune receptor repertoires}
+\begin{itemize}
+\item[]
+A BCR (TCR) \emph{repertoire} is the collection of BCRs (TCRs) in an individual at a given moment
+\bigskip
+\item[]
+This changes in time (and space?)
+\bigskip
+\item[]
+Can sample via high-throughput sequencing
+\end{itemize}
+\end{frame}
+
 \begin{frame}\frametitle{Motivation}
 Immune repertoire sequence datasets are large and complex:
 \begin{center}
@@ -360,13 +381,13 @@ $\implies$ How should we characterize them?
 \begin{frame}\frametitle{Goals}
 \begin{itemize}
 \item
-Idea: Summary statistics reduce a repertoire to numerical \\ (comparable!) quantities
+Idea: Summary statistics reduce a repertoire to comparable quantities
 \bigskip
 \item
 Goal: Build a comprehensive framework for repertoire characterization and comparison via \emph{lots} of summary statistics
 \bigskip
 \item
-Goal: Evaluate the statistics (e.g. robustness to noise, orthogonality) 
+Goal (in progress): Evaluate the statistics (e.g. robustness to noise, orthogonality) 
 \end{itemize}
 \end{frame}
 
@@ -447,11 +468,10 @@ Design and implementation of models is also complex:
 \begin{center}
 \includegraphics[width=0.8 \linewidth]{Images/bcell-mess-software.pdf}
 \end{center}
-$\implies$ How should we benchmark them?
 \end{frame}
 
 \begin{frame}\frametitle{Motivation}
-One (common) way to benchmark: 
+Common way to benchmark: 
 \begin{center}
 \includegraphics[width=0.7\linewidth]{Images/bcell-mess-simulation.pdf}
 \end{center}
@@ -465,23 +485,6 @@ One (common) way to benchmark:
 Simulation (top) looks very different than observations (bottom)
 \end{frame}
 
-\begin{frame}\frametitle{Goals}
-\begin{itemize}
-\item
-As discussed, we need to benchmark \emph{inferential} tools
-\bigskip
-\item
-This often requires reliable \emph{simulation} tools
-\bigskip
-\item
-Idea: Use our summary statistics framework to assess a simulator's quality
-\bigskip
-\item
-Goal: an automated system that compares simulations to observations and raises flags when things are off
-
-\end{itemize}
-\end{frame}
-
 \begin{frame}\frametitle{Prior work}
 \begin{itemize}
 \item
@@ -489,45 +492,22 @@ There have been extensive evaluations of repertoire simulators focused on partic
 \medskip
 \begin{itemize}
 \item
- Duncan's work for \texttt{partis} simulations
+ \texttt{partis} simulations
  \bigskip
  \item
- Will's work for \texttt{GCtree} simulations
+ \texttt{GCtree} simulations
  \bigskip
  \item
  Recent work for summary stats for selection inference
   \end{itemize}
 \bigskip
-\item
-We aim to extend this by:
-\medskip
-\begin{enumerate}
-\item building a tool that does comparisons for \emph{any} simulator 
-\bigskip
-\item using a broader swath of metrics agreed-upon by the community
-\bigskip
-\item creating automated reports with comparison metrics for others to assess
-\end{enumerate}
+\item Goal: generalize for arbitrary simulator with many summaries
 \end{itemize}
 \end{frame}
 
 \begin{frame}\frametitle{Comparing experimental and simulated data}
 \begin{center}
 \includegraphics[width=\linewidth]{Images/summary-stats.pdf}
-\end{center}
-\end{frame}
-
-\begin{frame}\frametitle{Comparing experimental and simulated data}
-Good simulators will yield summaries close to those from the observations:
-\begin{center}
-\includegraphics[width=0.65\linewidth]{Images/paired-summary-stats.pdf}
-\end{center}
-\end{frame}
-
-\begin{frame}\frametitle{Comparing experimental and simulated data}
-Worse simulators will yield summaries that are farther from the observations:
-\begin{center}
-\includegraphics[width=\linewidth]{Images/bad-statistics.png}
 \end{center}
 \end{frame}
 
@@ -539,17 +519,15 @@ We match the divergence method to the nature of $s(\cdot)$
 \item
 Jenson-Shannon divergence:
 \ba
-D_{1}(R_1, R_2) =
-\text{JS}(R_1 || R_2) = \frac{1}{2} \text{KL}(R_1 || M) + \frac{1}{2} \text{KL}(R_2 || M)
+\text{JS}(R_1, R_2) = \frac{1}{2} \text{KL}(R_1 || M) + \frac{1}{2} \text{KL}(R_2 || M)
 \ea
-where $M := \frac{R_1 + R_2}{2}$ and $\text{KL}$ refers to  KL-divergence
-\\ \vspace{0.5em} 
-Good for \emph{distributions}, e.g. distribution of GC content)
+where $M := \frac{R_1 + R_2}{2}$
+
 \bigskip
 \item
-Sum of absolute differences / $\ell_1$-norm
+$\ell_1$-divergence for categorical distributions
 \\ \vspace{0.5em}
-Good for vectors/matrices of \emph{count data} (e.g. Hill numbers, VDJ joint gene usage)
+(e.g. VDJ joint gene usage)
 \bigskip
 \item
 Absolute scalar difference \\
@@ -557,74 +535,10 @@ Absolute scalar difference \\
 \end{itemize}
 \end{frame}
 
-
-\begin{frame}\frametitle{Introducing \texttt{sumrep}}
-\begin{itemize}
-\item
-We're building an \texttt{R} package called \texttt{sumrep} (\emph{Sum}mary statistics for BCR/TCR \emph{Rep}ertoires)
-\bigskip
-\item
-Standardized collection of many summary statistics 
-\bigskip
-\item
-Corresponding comparison functions for each summary using a relevant divergence
-\bigskip
-\item
-Mostly on DNA or amino acid sequences, but also clusters, trees, and graphs
-\bigskip
-\item
-Why R? An abundance of many nice libraries, including \texttt{alakazam},
-\texttt{ape}, \texttt{Biostrings}, \texttt{Peptides}, \texttt{shazam}, and \texttt{seqinr}
-\end{itemize}
-\end{frame}
-
-\begin{frame}\frametitle{Summary statistics}
-\begin{itemize}
-\item
-Here, summary statistics $s : \mathcal R \mapsto \mathcal S$ map the set of repertoires $\mathcal R$  to some numerical set $\mathcal S$
-\medskip
-\item
-For example,
-\ba
-s_\text{GC-content}(R) =
-\left(\begin{matrix}
-\text{GC-content}(\mathtt{GAGGTGCAG...}) \\
-\text{GC-content}(\mathtt{CAGGTGCAG...}) \\
-\vdots \\
-\text{GC-content}(\mathtt{CATCTATCC...})
-\end{matrix} \right) = \begin{pmatrix} 0.481 \\ 0.522 \\ \vdots \\ 0.479  \end{pmatrix}
-\ea
-\item
-$s(R)$ can also be a scalar $\in \reals$ (e.g. in-frame percentage) or $\in \naturals$ (e.g. hot spot counts), vector of arbitrary dimension (e.g. hill numbers), 
-or a matrix (e.g. substitution model)
-\medskip
-\item
-Distribution vs single value \\
-$\iff$ Vector vs scalar
-\\ $\iff$ accuracy vs tractability
-\end{itemize}
-\end{frame}
-
-\begin{frame}\frametitle{Benchmarking tools}
-\begin{itemize}
-\item
-There are a number of repertoire-simulating tools, including \texttt{partis}, AbSim, IGoR, and IgSimulator
-\bigskip
-\item
-Collection of summaries should provide a thorough picture of the strengths and limitations of different generative models
-\bigskip
-\item
-Indicate where improvements can be made with respect to different summaries of biological/contextual importance
-\bigskip
-\item
-Can add summaries as needed, and omit the ones which seem uninformative
-\end{itemize}
-\end{frame}
-
 \begin{frame}\frametitle{Numerical study}
 \begin{itemize}
 \item
-Goal: Compare \texttt{partis} annotations and partitions to \texttt{partis} simulations
+Model validation of \texttt{partis}: multi-HMM for BCR inference
 \bigskip
 \item
 Annotate three datasets (between 10,000 - 30,000 sequences), and simulate using their inferred parameters
@@ -701,7 +615,12 @@ You put in a sequence, it gets mapped to a latent space, and then you can genera
 Train the VAE on $\approx300,000$ sequences from an individual with cytomegalovirus
 \bigskip
 \item
-Also train IGoR, the current state-of-the-art TCR inference and generative model, on same dataset
+Also train IGoR, the state-of-the-art TCR inference and generative model, on same dataset
+\bigskip
+\begin{itemize}
+\item
+IGoR uses a Bayesian network $+$ hypermutation model for likelihood-based inference
+\end{itemize}
 \bigskip
 \item
 Investigate summary distributions for the observed, VAE-simulated, and IGoR-simulated datasets 
@@ -710,41 +629,39 @@ Investigate summary distributions for the observed, VAE-simulated, and IGoR-simu
 
 \begin{frame}\frametitle{Preliminary results}
 \begin{center}
-\includegraphics[width=\linewidth]{Images/physiochem.pdf}
+\includegraphics[width=0.8\linewidth]{Images/physiochem.pdf}
+\end{center}
+\begin{center}
+\includegraphics[width=0.8\linewidth]{Images/aa.pdf}
 \end{center}
 \end{frame}
 
 \begin{frame}\frametitle{Preliminary results}
-\begin{center}
-\includegraphics[width=\linewidth]{Images/aa.pdf}
-\end{center}
+
 \begin{center}
 \includegraphics[width=\linewidth]{Images/DivTable.png}
 \end{center}
-\end{frame}
 
-\begin{frame}\frametitle{Wait... are we just regurgitating sequences?}
 \begin{itemize}
 \item
-We want to make sure we're not overfitting the training data
-\bigskip
-\item
-Idea: use the Birthday Paradox to estimate support of VAE
+Performed checks to make sure we're not overfitting the training data 
 \end{itemize}
 \end{frame}
 
 \section{Conclusion}
 
 \begin{frame}\frametitle{Interested? Start here!}
-\begin{center}
 \begin{itemize}
 \item[]
+\begin{center}
 \includegraphics[width=0.8 \linewidth]{Images/Sompayrac.png}
+\end{center}
 \bigskip
 \item[]
+\begin{center}
 \includegraphics[width=\linewidth]{Images/Optimist.png}
-\end{itemize}
 \end{center}
+\end{itemize}
 \end{frame}
 
 \begin{frame}
