@@ -488,7 +488,7 @@ Simulation (top) looks very different than observations (bottom)
 \begin{frame}\frametitle{Prior work}
 \begin{itemize}
 \item
-There have been extensive evaluations of repertoire simulators focused on particular tools/questions	
+Usually, validation of repertoire simulators is focused on a particular tool/question
 \medskip
 \begin{itemize}
 \item
@@ -564,8 +564,10 @@ Scoring formula:
 	& = \log \left( \frac{ \text{average div. of obs. to sim. counterpart} }
 					{ \text{average div. of obs. to other obs.} } \right)
 \ea 
+\begin{itemize}
+\item
 $R_{i, \text{obs}}$ is the $i$th observed dataset and $R_{i, \text{sim}}$ is the simulation based on the $i$th observed dataset.  
-\bigskip
+\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -617,11 +619,6 @@ Train the VAE on $\approx300,000$ sequences from an individual with cytomegalovi
 \item
 Also train IGoR, the state-of-the-art TCR inference and generative model, on same dataset
 \bigskip
-\begin{itemize}
-\item
-IGoR uses a Bayesian network $+$ hypermutation model for likelihood-based inference
-\end{itemize}
-\bigskip
 \item
 Investigate summary distributions for the observed, VAE-simulated, and IGoR-simulated datasets 
 \end{itemize}
@@ -671,6 +668,11 @@ Questions?
 \end{center}
 \end{frame}
 
+\begin{frame}
+\begin{center}
+\includegraphics[width=\linewidth]{Images/VAE_diagram.png}
+\end{center}
+\end{frame}
 
 \end{document}
 
