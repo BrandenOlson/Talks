@@ -187,7 +187,7 @@
 \beamertemplatenavigationsymbolsempty
 \setbeamertemplate{headline}{\vskip2pt}
 
-\title[]{Adaptive immune receptor sequence analysis and generative modeling}
+\title[]{B and T cell receptor sequence analysis and generative modeling}
 
 \author[]
 {Branden Olson}
@@ -463,6 +463,12 @@ Graph-theoretical features & Yes & Yes & Yes & TBD \\
 \end{center}
 \end{frame}
 
+\begin{frame}\frametitle{Univariate distribution plots for 2 datasets}
+\begin{center}
+\includegraphics[width=\linewidth]{Images/Dual_summaries.png}
+\end{center}
+\end{frame}
+
 \section{Generative model validation}
 
 \begin{frame}\frametitle{Motivation}
@@ -491,7 +497,6 @@ Simulation (top) looks very different than observations (bottom)
 \begin{itemize}
 \item
 Usually, validation of repertoire simulators is focused on a particular tool/question
-\medskip
 \bigskip
 \item Our aim: generalize for arbitrary simulator with many summaries
 \end{itemize}
@@ -547,7 +552,7 @@ Deep neural networks are making an impact in, like, every field
 \end{itemize}
 \end{frame}
 
-\begin{frame}\frametitle{What is a neural network?}
+\begin{frame}\frametitle{What's a neural network?}
 \begin{center}
 \includegraphics[width=\linewidth]{Images/NN.pdf}
 \end{center}
@@ -559,7 +564,7 @@ Deep neural networks are making an impact in, like, every field
 \end{center}
 \end{frame}
 
-\begin{frame}
+\begin{frame}\frametitle{VAE objective}
 \begin{itemize}
 \item
 Ultimately, the objective function is a loss term $+$ a regularizer term:
@@ -586,6 +591,7 @@ Can be trained with stochastic gradient descent
 \begin{itemize}
 \item
 We are using a variational autoencoder (VAE) to infer a distribution over a functional repertoire:
+\bigskip
 \begin{center}
 \includegraphics[width=0.7\linewidth]{Images/VAE.png}
 \end{center}
@@ -647,15 +653,28 @@ Performed checks to make sure we're not overfitting the training data
 
 \begin{frame}
 \begin{center}
-\large
+\Huge
 Questions?
 \end{center}
 \end{frame}
 
-\begin{frame}
+\begin{frame}\frametitle{VAE diagram}
 \begin{center}
-\includegraphics[width=\linewidth]{Images/VAE_diagram.png}
+\includegraphics[width=0.95\linewidth]{Images/VAE_diagram.png}
 \end{center}
+\end{frame}
+
+\begin{frame}\frametitle{Why a VAE?}
+\begin{itemize}
+\item
+Functionality induces intricate long-range dependencies that defeat classical tools such as HMMs
+\bigskip
+\item
+Current distance functions or Potts models are unable to categorize the repertoire into functional groups
+\bigskip
+\item
+Deep neural networks have emerged as the dominant means of machine learning in complex settings when data are abundant
+\end{itemize}
 \end{frame}
 
 \end{document}
