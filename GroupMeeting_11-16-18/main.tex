@@ -187,7 +187,7 @@
 \beamertemplatenavigationsymbolsempty
 \setbeamertemplate{headline}{\vskip2pt}
 
-\title[]{Immune receptor repertoire comparison and model validation via \texttt{sumrep}}
+\title[]{Immune receptor repertoire summaries and comparison via \texttt{sumrep}}
 
 \author[]
 {Branden Olson, Erick Matsen, and lots of AIRR software-wg folks}
@@ -197,9 +197,7 @@
 
 \institute[]
 {
-Department of Statistics
-\\
-University of Washington Seattle
+Fred Hutch
 }
 
 \AtBeginSection[]
@@ -215,9 +213,6 @@ University of Washington Seattle
 \begin{frame}[noframenumbering]
   \titlepage
 \end{frame}
-
-\section{Introduction}
-
 
 \section{Repertoire summaries and comparisons}
 
@@ -245,6 +240,9 @@ Goal: Build a comprehensive framework for repertoire characterization and compar
 \bigskip
 \item
 Goal (in progress): Evaluate the statistics (e.g. robustness to noise, orthogonality) 
+\bigskip
+\item
+Application (in progress): Generative model validation
 \end{itemize}
 \end{frame}
 
@@ -322,69 +320,6 @@ Graph-theoretical features & Yes & Yes & Yes & TBD \\
 \begin{center}
 \includegraphics[width=\linewidth]{Images/Dual_summaries.png}
 \end{center}
-\end{frame}
-
-\section{Generative model validation}
-
-\begin{frame}\frametitle{Motivation}
-Design and implementation of models is also complex:
-\begin{center}
-\includegraphics[width=0.8 \linewidth]{Images/bcell-mess-software.pdf}
-\end{center}
-\end{frame}
-
-\begin{frame}\frametitle{Motivation}
-Common way to benchmark: 
-\begin{center}
-\includegraphics[width=0.7\linewidth]{Images/bcell-mess-simulation.pdf}
-\end{center}
-\end{frame}
-
-\begin{frame}
-
-\begin{center}\frametitle{Motivating example: Nearest-neighbor distances}
-\includegraphics[width=0.4\linewidth]{Images/Dengue.png}
-\end{center}
-Simulation (top) looks very different than observations (bottom)
-\end{frame}
-
-\begin{frame}\frametitle{Prior work}
-\begin{itemize}
-\item
-Usually, validation of repertoire simulators is focused on a particular tool/question
-\bigskip
-\item Our aim: generalize for arbitrary simulator with many summaries
-\end{itemize}
-\end{frame}
-
-\begin{frame}\frametitle{Comparing experimental and simulated data}
-\begin{center}
-\includegraphics[width=\linewidth]{Images/summary-stats.pdf}
-\end{center}
-\end{frame}
-
-\begin{frame}\frametitle{Comparing summaries using divergences}
-\begin{itemize}
-\item
-We match the divergence method to the nature of $s(\cdot)$
-\bigskip
-\item
-Jenson-Shannon divergence:
-\ba
-\text{JS}(R_1, R_2) = \frac{1}{2} \text{KL}(R_1 || M) + \frac{1}{2} \text{KL}(R_2 || M)
-\ea
-where $M := \frac{R_1 + R_2}{2}$
-
-\bigskip
-\item
-$\ell_1$-divergence for categorical distributions
-\\ \vspace{0.5em}
-(e.g. VDJ joint gene usage)
-\bigskip
-\item
-Absolute scalar difference \\
-(e.g. in-frame percentages)
-\end{itemize}
 \end{frame}
 
 \section{Automatic distribution subsampling}
