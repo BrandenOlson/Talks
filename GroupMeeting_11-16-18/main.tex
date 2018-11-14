@@ -376,9 +376,34 @@ Consider converged if the JS divergence between successive iterates is less than
 \end{itemize}
 \end{frame}
 
+\begin{frame}\frametitle{Comparison of approaches}
+\begin{center}
+\begin{itemize}
+\item Full: Compute PD distribution 17,769 BCR sequence reads
+\item Subsample: Compute PD distribution on a random sample of 1,000 sequences (w/o replacement) of full set
+\item Approx.: Compute our approximate PD distribution using full set
+\end{itemize}
+\bigskip
+\begin{tabular}{c|c|c|c}
+Distribution & Runtime & KLD to full & Size \\
+\hline
+Full & 61689 s ($\approx$ 17 hours) &  -- & 1.2 Gb \\
+Subsample & 186.22 s ($\approx$ 3 min) & 0.0027300 & 3.8 Mb \\
+Approx. $\left(\eps = 10^{-3}\right)$ & 11.709 s & 0.016716 & 232 Kb\\
+Approx. $\left(\eps = \frac{10^{-5}}{2}\right)$ & 131.91 s ($\approx$ 2.2 min) & 0.0010663 & 2.1 Mb
+\end{tabular}
+\end{center}
+\end{frame}
+
 \begin{frame}\frametitle{Performance by tolerance}
 \begin{center}
 \includegraphics[width=\linewidth]{/Users/brandenolson/Code/Matsen/Manuscripts/sumrep-ms/Figures/PairwiseDistance/div_by_tol.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{Runtime by tolerance}
+\begin{center}
+\includegraphics[width=\linewidth]{/Users/brandenolson/Code/Matsen/Manuscripts/sumrep-ms/Figures/PairwiseDistance/time_by_tol.pdf}
 \end{center}
 \end{frame}
 
@@ -391,6 +416,180 @@ Consider converged if the JS divergence between successive iterates is less than
 \begin{frame}\frametitle{Performance by summary statistic}
 
 \end{frame}
+
+\begin{frame}\frametitle{}
+\begin{center}
+\huge
+Does this work for every summary statistic?
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{Nearest neighbor distribution}
+
+\end{frame}
+
+\section{Nearest neighbor distribution approximation}
+
+\begin{frame}\frametitle{Recap of nearest neighbor distance}
+\begin{itemize}
+\item[]
+Let $d(\cdot, \cdot)$ be a string metric (e.g., Levenshtein distance)
+\bigskip
+\item[]
+Let $s$ be a sequence string and $R$ be some reference set of sequences
+\bigskip
+\item[]
+For us, assume $s \in R$
+\bigskip
+\item[]
+Then the nearest neighbor distance of $s$ to $R$ is
+\ba
+d_\text{NN}(s, R)
+	& := \min_{s' \in R \setminus \set{s}}
+		d(s, s')
+\ea
+\item[]
+Note: computing this distribution for a repertoire is $\mathcal O(n^2)$ $\implies$ we need to approximate
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Why does our algorithm fail?}
+\begin{itemize}
+\item
+For any subset $S \subset R$, we have necessarily that
+\ba
+\forall i: \htab d_\text{NN}(s_i, S) \ge d_\text{NN}(s_i, R)
+\ea
+\smallskip
+\item
+This is because $S$ has fewer sequences to iterate over, and $\therefore$ fewer chances for a sequence to have a smaller $d_\text{NN}$ to $s_i$
+\bigskip
+\item
+This yields a distribution heavily biased towards higher values
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Can we fix it?}
+\begin{itemize}
+\item
+Idea: First, cluster sequences by sequence similarity
+\begin{itemize}
+\smallskip
+\item E.g., UCLUST, or open-source alternatives like \texttt{vsearch}
+\end{itemize}
+\bigskip
+\item
+This yields clusters $c$ such that $\forall s \in c$, NN($s$) $\in C$ with high probability
+\bigskip
+\item
+This greatly cuts down the runtime, since now $d_\text{NN}(s, R) \approx d_\text{NN}(s, c(s))$
+\end{itemize}
+\end{frame}
+
+\section{Amino acid properties of IB2+ antibodies}
+
+\begin{frame}\frametitle{Effect of IB2+ on VH1-3 derived CDRH3 amino acid properties}
+\begin{itemize}
+\item
+IgG1 b12 Abs are broadly-neutralizing antibodies against HIV-1
+ class of VH1-3 derived antibodies (Zwick 2003)
+ \bigskip
+ \item
+IB2$^+$ Abs are idiotypic antibodies against b12
+\bigskip
+\item
+Idea/hope: if IB2$^+$ Abs bind to b12, and b12 binds to HIV-1, then IB2$^+$ Abs might bind to HIV-1 
+\bigskip
+\item
+IB2$^+$ Abs are predominantly VH1-3 derived
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{IB2$^+$ vs other VH1-3 derived Abs}
+\begin{itemize}
+\item
+Question: how do IB2$^+$ Abs differ from other VH1-3 derived Abs?
+\bigskip
+\item
+Well, let's look at different CDRH3 amino acid summaries
+\bigskip
+\item
+Test data set: VH1-3 derived IB2$^+$ Abs ($n = 228$)
+\bigskip
+\item
+Null data set: VH1-3 derived Abs pooled from three donors ($n = 466$, Dekosky 2013)
+\bigskip
+\item
+Sampled from naive population $\implies $ no need to worry about clonal dependence 
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Summary histograms}
+\begin{center}
+\includegraphics[width=\linewidth]{/Users/brandenolson/Code/Matsen/IB2/Figures/summaries.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{Summary-wise scatter plots}
+\begin{center}
+\includegraphics[width=0.8\linewidth]{/Users/brandenolson/Code/Matsen/IB2/Figures/null_pairs.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{Randomization test}
+\begin{itemize}
+\item
+Want a statistical test that controls for correlation
+\bigskip
+\item
+For each summary distribution $s$, and datasets $D_\text{null}$ and $D_\text{IB2$^+$}$, define
+\ba
+\text{score}(s; D_\text{null}, D_\text{IB2$^+$})
+	& = 
+\ea
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Experimental results}
+\begin{center}
+\begin{tabular}{c|c|c}
+Summary & Score & Score $>$ QMS? \\
+\hline
+Basicity & 0.42032 & TRUE \\
+Charge & 0.41243 & TRUE \\
+Aromaticity & 0.38363 & TRUE \\
+Aliphatic index & 0.37836 & TRUE \\
+Bulkiness & 0.31667 & TRUE \\
+GRAVY index & 0.25927 & FALSE \\
+CDR3 length & 0.20020 & FALSE \\
+Acidity & 0.16057 & FALSE \\
+Polarity & 0.07219 & FALSE \\
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{Summary plots with gl-b12 values}
+\begin{center}
+\includegraphics[width=\linewidth]{/Users/brandenolson/Code/Matsen/IB2/Figures/significant_ib2_summaries.pdf}
+\end{center}
+\end{frame}
+
+
+\begin{frame}\frametitle{References}
+\begin{enumerate}
+\item
+Brandon J DeKosky et al. (2013).
+High-throughput sequencing of the paired human
+immunoglobulin heavy and light chain repertoire.
+\emph{Nature Biotechnology}, \textbf{31} (2), 166--169.
+\bigskip
+\item
+Michael B. Zwick et al. (2003).
+Molecular Features of the Broadly Neutralizing Immunoglobulin G1 b12 Required for Recognition of Human Immunodeficiency Virus Type 1 gp120.
+\emph{Journal of Virology}, \textbf{77} (10), 5863--5876.
+\end{enumerate}
+\end{frame}
+
 
 \begin{frame}
 \begin{center}
