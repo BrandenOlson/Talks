@@ -261,8 +261,8 @@ Came up with many stats, from simple DNA stats to specific, complex B/TCR summar
 \end{itemize}
 \end{frame}
 
-\begin{frame}\frametitle{Current table of (38) statistics}
-\fontsize{5}{7.5}\selectfont
+\begin{frame}\frametitle{Current table of (44) statistics}
+\fontsize{5}{6}\selectfont
 \begin{tabular}{c|c|c|c|c}
     Summary statistic & Annotations & Clustering & Phylogeny & Implementation
 \\
@@ -284,6 +284,12 @@ Hydrophobicity distribution & Yes & No & No & \texttt{Peptides} \\
 Atchley factors distribution & Yes & No & No & \texttt{HDMD} \\
 Aliphatic index distribution & Yes & No & No & \texttt{Peptides} \\
 G.R.A.V.Y. index distribution & Yes & No & No & \texttt{alakazam} \\
+Basicity distribution & Yes & No & No & \texttt{alakazam} \\
+Charge distribution & Yes & No & No & \texttt{alakazam} \\
+Aromaticity distribution & Yes & No & No & \texttt{alakazam} \\
+Bulkiness distribution & Yes & No & No & \texttt{alakazam} \\
+Acidity distribution & Yes & No & No & \texttt{alakazam} \\
+Polarity distribution& Yes & No & No & \texttt{alakazam} \\
 Per-gene substitution rate & Yes & No & No & Tool-provided + \texttt{sumrep} \\
 Per-gene-per-position substitution rate & Yes & No & No & Tool-provided + \texttt{sumrep} \\
 Per-base mutability model & Yes & No & No & \texttt{shazam} \\
@@ -414,7 +420,9 @@ Approx. $\left(\eps = \frac{10^{-5}}{2}\right)$ & 131.91 s ($\approx$ 2.2 min) &
 \end{frame}
 
 \begin{frame}\frametitle{Performance by summary statistic}
-
+\begin{center}
+\includegraphics[width=\linewidth]{Images/div_by_summary.png}
+\end{center}
 \end{frame}
 
 \begin{frame}\frametitle{}
@@ -424,8 +432,22 @@ Does this work for every summary statistic?
 \end{center}
 \end{frame}
 
-\begin{frame}\frametitle{Nearest neighbor distribution}
+\begin{frame}\frametitle{Nearest neighbor distribution divergences}
+\begin{center}
+\includegraphics[width=\linewidth]{Images/div_by_tol.png}
+\end{center}
+\end{frame}
 
+\begin{frame}\frametitle{NN distribution frequency polygons}
+\begin{center}
+\includegraphics[width=\linewidth]{Images/hist_nn.png}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{NN distribution empirical cumulative distribution functions}
+\begin{center}
+\includegraphics[width=\linewidth]{Images/ecdf_nn.png}
+\end{center}
 \end{frame}
 
 \section{Nearest neighbor distribution approximation}
@@ -479,20 +501,61 @@ Idea: First, cluster sequences by sequence similarity
 \end{itemize}
 \bigskip
 \item
-This yields clusters $c$ such that $\forall s \in c$, NN($s$) $\in C$ with high probability
+This yields clusters $c$ such that $\forall s \in c$, NN($s$) $\in c$ with high probability
 \bigskip
 \item
 This greatly cuts down the runtime, since now $d_\text{NN}(s, R) \approx d_\text{NN}(s, c(s))$
 \end{itemize}
 \end{frame}
 
-\section{Amino acid properties of IB2+ antibodies}
+\begin{frame}\frametitle{However...}
+\begin{itemize}
+\item
+What if the clustering procedure returns singletons? (as \texttt{vsearch} very often does)
+\bigskip
+\item
+One thought: combine all singleton clusters into its own cluster
+\bigskip
+\item
+Does this work?
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{KL-divergence of NN approximation routine by tolerance}
+\begin{center}
+\includegraphics[width=\linewidth]{/Users/brandenolson/Code/Matsen/Manuscripts/sumrep-ms/Figures/NearestNeighbor/div_by_tol.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{Runtime of NN approximation routine by tolerance}
+\begin{center}
+\includegraphics[width=\linewidth]{/Users/brandenolson/Code/Matsen/Manuscripts/sumrep-ms/Figures/Multiple/div_by_summary_and_tol.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{Stuff to try}
+\begin{itemize}
+\item
+Better than before, but still some tail bias that doesn't goes away
+\bigskip
+\item
+This suggests that some NNs of singletons reside in non-singleton clusters
+\bigskip
+\item
+Idea: Include centroid of every cluster in the singleton cluster (in progress)
+\bigskip
+\item
+Other thoughts/suggestions?
+
+\end{itemize}
+\end{frame}
+
+\section{Application: Amino acid properties of IB2+ antibodies}
 
 \begin{frame}\frametitle{Effect of IB2+ on VH1-3 derived CDRH3 amino acid properties}
 \begin{itemize}
 \item
-IgG1 b12 Abs are broadly-neutralizing antibodies against HIV-1
- class of VH1-3 derived antibodies (Zwick 2003)
+IgG1 b12 Abs are broadly-neutralizing antibodies against HIV-1 (Zwick 2003)
  \bigskip
  \item
 IB2$^+$ Abs are idiotypic antibodies against b12
@@ -501,7 +564,7 @@ IB2$^+$ Abs are idiotypic antibodies against b12
 Idea/hope: if IB2$^+$ Abs bind to b12, and b12 binds to HIV-1, then IB2$^+$ Abs might bind to HIV-1 
 \bigskip
 \item
-IB2$^+$ Abs are predominantly VH1-3 derived
+Remark: IB2$^+$ Abs are predominantly VH1-3 derived
 \end{itemize}
 \end{frame}
 
@@ -511,7 +574,7 @@ IB2$^+$ Abs are predominantly VH1-3 derived
 Question: how do IB2$^+$ Abs differ from other VH1-3 derived Abs?
 \bigskip
 \item
-Well, let's look at different CDRH3 amino acid summaries
+Idea: let's look at different CDRH3 amino acid summaries
 \bigskip
 \item
 Test data set: VH1-3 derived IB2$^+$ Abs ($n = 228$)
@@ -545,8 +608,45 @@ Want a statistical test that controls for correlation
 For each summary distribution $s$, and datasets $D_\text{null}$ and $D_\text{IB2$^+$}$, define
 \ba
 \text{score}(s; D_\text{null}, D_\text{IB2$^+$})
-	& = 
+	& = \frac{|m_2 - m_1|}
+		{ \sqrt{ \frac{n(m_1^2 + s_1^2) + m(m_2^2 + s_2^2)}{m + n} - m^2 } }
 \ea
+\item
+This gives a measure of how different $D_\text{null}$ and $D_\text{IB2$^+$}$ with respect to $s$
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Randomization test}
+\begin{itemize}
+\item[]
+Next, we do a randomization test:
+\bigskip
+\smallskip
+\item[]
+For the $j$th trial: 
+\begin{itemize}
+\item
+Randomly reassign null or IB2$^+$ labels to each sequence
+\bigskip
+\item
+Compute $\text{score}(s_i; D_{j, \text{null}}, D_{j, \text{IB2$^+$}})$ for each $s_i$
+\item
+\bigskip
+Identify $\max_i \text{score}(s_i; D_{j, \text{null}}, D_{j, \text{IB2$^+$}})$
+\end{itemize}
+\bigskip
+\item[]
+After $J$ trials, compute
+\ba
+\text{QMS} := \underset{1 \le j \le J}{\widehat{q_{0.99}}} \left(
+	\max_i \text{score}( (s_i; D_{j, \text{null}}, D_{j, \text{IB2$^+$}})
+	\right)
+\ea
+\item[]
+Finally, we say that $s$ is significantly different if 
+$\text{score}(s; D_\text{null}, D_\text{IB2$^+$})
+	> \text{QMS}$
+
 \end{itemize}
 \end{frame}
 
