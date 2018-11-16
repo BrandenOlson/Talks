@@ -328,6 +328,131 @@ Graph-theoretical features & Yes & Yes & Yes & TBD \\
 \end{center}
 \end{frame}
 
+
+\section{Application: Amino acid properties of IB2+ antibodies}
+
+\begin{frame}\frametitle{Effect of IB2+ on VH1-3 derived CDRH3 amino acid properties}
+\begin{itemize}
+\item
+IgG1 b12 is a broadly-neutralizing antibody against HIV-1 (Zwick 2003)
+ \bigskip
+ \item
+IB2$^+$ Abs are idiotypic antibodies against b12
+\bigskip
+\item
+Idea/hope: if IB2$^+$ Abs bind to b12, and b12 binds to HIV-1, then IB2$^+$ Abs might bind to HIV-1 
+\bigskip
+\item
+Remark: IB2$^+$ Abs are predominantly VH1-3 derived
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{IB2$^+$ vs other VH1-3 derived Abs}
+\begin{itemize}
+\item
+Question: how do IB2$^+$ Abs differ from other VH1-3 derived Abs?
+\bigskip
+\item
+Idea: let's look at different CDRH3 amino acid summaries
+\bigskip
+\item
+Test data set: VH1-3 derived IB2$^+$ Abs ($n = 228$)
+\bigskip
+\item
+Null data set: VH1-3 derived Abs pooled from three donors ($n = 466$, Dekosky 2013)
+\bigskip
+\item
+Sampled from naive population $\implies $ no need to worry about clonal dependence 
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Summary histograms}
+\begin{center}
+\includegraphics[width=\linewidth]{/Users/brandenolson/Code/Matsen/IB2/Figures/summaries.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{Summary-wise scatter plots}
+\begin{center}
+\includegraphics[width=0.8\linewidth]{/Users/brandenolson/Code/Matsen/IB2/Figures/null_pairs.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{Randomization test}
+\begin{itemize}
+\item
+Want a statistical test that controls for correlation
+\bigskip
+\item
+For each summary distribution $s$, and datasets $D_\text{null}$ and $D_\text{IB2$^+$}$, define
+\ba
+\text{score}(s; D_\text{null}, D_\text{IB2$^+$})
+	& = \frac{|m_2 - m_1|}
+		{ \sqrt{ \frac{n(m_1^2 + s_1^2) + m(m_2^2 + s_2^2)}{m + n} - m^2 } }
+\ea
+\item
+This gives a measure of how different $D_\text{null}$ and $D_\text{IB2$^+$}$ with respect to $s$
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Randomization test}
+\begin{itemize}
+\item[]
+Next, we do a randomization test:
+\bigskip
+\smallskip
+\item[]
+For the $j$th trial: 
+\begin{itemize}
+\item
+Randomly reassign null or IB2$^+$ labels to each sequence
+\bigskip
+\item
+Compute $\text{score}(s_i; D_{j, \text{null}}, D_{j, \text{IB2$^+$}})$ for each $s_i$
+\item
+\bigskip
+Identify $\max_i \text{score}(s_i; D_{j, \text{null}}, D_{j, \text{IB2$^+$}})$
+\end{itemize}
+\bigskip
+\item[]
+After $J$ trials, compute the 99-quantile of maximum scores:
+\ba
+\text{QMS} := \underset{1 \le j \le J}{\widehat{q_{0.99}}} \left(
+	\max_i \text{score} (s_i; D_{j, \text{null}}, D_{j, \text{IB2$^+$}})
+	\right)
+\ea
+\item[]
+Finally, we say that $s$ is significantly different if 
+$\text{score}(s; D_\text{null}, D_\text{IB2$^+$})
+	> \text{QMS}$
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Experimental results}
+\begin{center}
+\begin{tabular}{c|c|c}
+Summary & Score & Score $>$ QMS? \\
+\hline
+Basicity & 0.42032 & TRUE \\
+Charge & 0.41243 & TRUE \\
+Aromaticity & 0.38363 & TRUE \\
+Aliphatic index & 0.37836 & TRUE \\
+Bulkiness & 0.31667 & TRUE \\
+GRAVY index & 0.25927 & FALSE \\
+CDR3 length & 0.20020 & FALSE \\
+Acidity & 0.16057 & FALSE \\
+Polarity & 0.07219 & FALSE \\
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{Summary plots with gl-b12 values}
+\begin{center}
+\includegraphics[width=\linewidth]{/Users/brandenolson/Code/Matsen/IB2/Figures/significant_ib2_summaries.pdf}
+\end{center}
+\end{frame}
+
 \section{Automatic distribution subsampling}
 
 \begin{frame}\frametitle{Sampling distributions}
@@ -355,6 +480,7 @@ Computing the pairwise distance distribution of $n$ sequences grows very quickly
 \bigskip
 \item
 If we have a repertoire of $n = 50,000$ sequences, we could try to subsample $k = 10,000$ and call it good. But this will still be very slow. 
+\bigskip
 \item
 Even $k = 1,000$ takes some time, and we're not sure how much we're losing.
 
@@ -374,6 +500,7 @@ Append this to a rolling distribution
 \item
 Stop when successive iterates stop changing
 \end{itemize}
+\bigskip
 \item
 Here, an iterate is a distribution (i.e., a vector of integers)
 \bigskip
@@ -523,13 +650,19 @@ Does this work?
 
 \begin{frame}\frametitle{KL-divergence of NN approximation routine by tolerance}
 \begin{center}
-\includegraphics[width=\linewidth]{/Users/brandenolson/Code/Matsen/Manuscripts/sumrep-ms/Figures/NearestNeighbor/div_by_tol.pdf}
+\includegraphics[width=\linewidth]{Images/div_by_tol_nn.png}
 \end{center}
 \end{frame}
 
-\begin{frame}\frametitle{Runtime of NN approximation routine by tolerance}
+\begin{frame}\frametitle{Comparison to other summaries}
 \begin{center}
 \includegraphics[width=\linewidth]{/Users/brandenolson/Code/Matsen/Manuscripts/sumrep-ms/Figures/Multiple/div_by_summary_and_tol.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{Ecdf of NN approximation routine by tolerance}
+\begin{center}
+\includegraphics[width=\linewidth]{/Users/brandenolson/Code/Matsen/Manuscripts/sumrep-ms/Figures/NearestNeighbor/ecdf_by_tol.pdf}
 \end{center}
 \end{frame}
 
@@ -549,131 +682,6 @@ Other thoughts/suggestions?
 
 \end{itemize}
 \end{frame}
-
-\section{Application: Amino acid properties of IB2+ antibodies}
-
-\begin{frame}\frametitle{Effect of IB2+ on VH1-3 derived CDRH3 amino acid properties}
-\begin{itemize}
-\item
-IgG1 b12 Abs are broadly-neutralizing antibodies against HIV-1 (Zwick 2003)
- \bigskip
- \item
-IB2$^+$ Abs are idiotypic antibodies against b12
-\bigskip
-\item
-Idea/hope: if IB2$^+$ Abs bind to b12, and b12 binds to HIV-1, then IB2$^+$ Abs might bind to HIV-1 
-\bigskip
-\item
-Remark: IB2$^+$ Abs are predominantly VH1-3 derived
-\end{itemize}
-\end{frame}
-
-\begin{frame}\frametitle{IB2$^+$ vs other VH1-3 derived Abs}
-\begin{itemize}
-\item
-Question: how do IB2$^+$ Abs differ from other VH1-3 derived Abs?
-\bigskip
-\item
-Idea: let's look at different CDRH3 amino acid summaries
-\bigskip
-\item
-Test data set: VH1-3 derived IB2$^+$ Abs ($n = 228$)
-\bigskip
-\item
-Null data set: VH1-3 derived Abs pooled from three donors ($n = 466$, Dekosky 2013)
-\bigskip
-\item
-Sampled from naive population $\implies $ no need to worry about clonal dependence 
-\end{itemize}
-\end{frame}
-
-\begin{frame}\frametitle{Summary histograms}
-\begin{center}
-\includegraphics[width=\linewidth]{/Users/brandenolson/Code/Matsen/IB2/Figures/summaries.pdf}
-\end{center}
-\end{frame}
-
-\begin{frame}\frametitle{Summary-wise scatter plots}
-\begin{center}
-\includegraphics[width=0.8\linewidth]{/Users/brandenolson/Code/Matsen/IB2/Figures/null_pairs.pdf}
-\end{center}
-\end{frame}
-
-\begin{frame}\frametitle{Randomization test}
-\begin{itemize}
-\item
-Want a statistical test that controls for correlation
-\bigskip
-\item
-For each summary distribution $s$, and datasets $D_\text{null}$ and $D_\text{IB2$^+$}$, define
-\ba
-\text{score}(s; D_\text{null}, D_\text{IB2$^+$})
-	& = \frac{|m_2 - m_1|}
-		{ \sqrt{ \frac{n(m_1^2 + s_1^2) + m(m_2^2 + s_2^2)}{m + n} - m^2 } }
-\ea
-\item
-This gives a measure of how different $D_\text{null}$ and $D_\text{IB2$^+$}$ with respect to $s$
-\end{itemize}
-\end{frame}
-
-\begin{frame}\frametitle{Randomization test}
-\begin{itemize}
-\item[]
-Next, we do a randomization test:
-\bigskip
-\smallskip
-\item[]
-For the $j$th trial: 
-\begin{itemize}
-\item
-Randomly reassign null or IB2$^+$ labels to each sequence
-\bigskip
-\item
-Compute $\text{score}(s_i; D_{j, \text{null}}, D_{j, \text{IB2$^+$}})$ for each $s_i$
-\item
-\bigskip
-Identify $\max_i \text{score}(s_i; D_{j, \text{null}}, D_{j, \text{IB2$^+$}})$
-\end{itemize}
-\bigskip
-\item[]
-After $J$ trials, compute
-\ba
-\text{QMS} := \underset{1 \le j \le J}{\widehat{q_{0.99}}} \left(
-	\max_i \text{score}( (s_i; D_{j, \text{null}}, D_{j, \text{IB2$^+$}})
-	\right)
-\ea
-\item[]
-Finally, we say that $s$ is significantly different if 
-$\text{score}(s; D_\text{null}, D_\text{IB2$^+$})
-	> \text{QMS}$
-
-\end{itemize}
-\end{frame}
-
-\begin{frame}\frametitle{Experimental results}
-\begin{center}
-\begin{tabular}{c|c|c}
-Summary & Score & Score $>$ QMS? \\
-\hline
-Basicity & 0.42032 & TRUE \\
-Charge & 0.41243 & TRUE \\
-Aromaticity & 0.38363 & TRUE \\
-Aliphatic index & 0.37836 & TRUE \\
-Bulkiness & 0.31667 & TRUE \\
-GRAVY index & 0.25927 & FALSE \\
-CDR3 length & 0.20020 & FALSE \\
-Acidity & 0.16057 & FALSE \\
-Polarity & 0.07219 & FALSE \\
-\end{tabular}
-\end{center}
-\end{frame}
-
-\begin{frame}\frametitle{Summary plots with gl-b12 values}
-\begin{center}
-\includegraphics[width=\linewidth]{/Users/brandenolson/Code/Matsen/IB2/Figures/significant_ib2_summaries.pdf}
-\end{center}
-\end{frame}
-
 
 \begin{frame}\frametitle{References}
 \begin{enumerate}
