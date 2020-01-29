@@ -1,0 +1,12 @@
+\frametitle{Example: rigorous solution}
+Using the numerical solver \texttt{lpSolve::lp} in R, we verify the above:
+\bigskip
+\begin{lstlisting}
+> lp_sol
+Success: the objective function is 1.2
+> lp_sol$solution %>% matrix(byrow=T, nrow=3)
+     [,1] [,2] [,3]
+[1,]  0.3  0.3  0.0
+[2,]  0.0  0.2  0.1
+[3,]  0.0  0.0  0.1
+\end{lstlisting}
