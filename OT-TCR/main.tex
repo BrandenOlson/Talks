@@ -1,0 +1,709 @@
+\documentclass[mathserif,compress,xcolor={dvipsnames}]{beamer}
+
+\mode<presentation>
+{
+  \usecolortheme{orchid}
+  \useoutertheme{shadow}
+}
+\newcommand\hmmax{0}
+\newcommand\bmmax{0}
+\usepackage{natbib, verbatim}
+
+\usepackage[utf8]{inputenc}
+
+\usepackage{mathpazo}
+\usepackage[T1]{fontenc}
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{blkarray}
+\usepackage{mathptmx}
+\usepackage{anyfontsize}
+\usepackage{t1enc}
+\usepackage{appendix}
+\usepackage{array}
+\usepackage{bm}
+\usepackage{cancel}
+\usepackage{cite}
+\usepackage{courier}
+\usepackage{graphicx}
+\usepackage{empheq}
+\usepackage{enumerate}
+\usepackage{listings}
+\usepackage{mathtools}
+\usepackage{units}
+\usepackage{bigstrut}
+\usepackage{rotating}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{algorithm, algorithmic}
+
+\usepackage{lipsum}
+
+\newcommand\Wider[2][3em]{%
+\makebox[\linewidth][c]{%
+  \begin{minipage}{\dimexpr\textwidth+#1\relax}
+  \raggedright#2
+  \end{minipage}%
+  }%
+}
+
+\DeclareMathAlphabet{\mathcal}{OMS}{cmsy}{m}{n}
+
+\DeclareMathAlphabet{\mathsfit}{\encodingdefault}{\sfdefault}{m}{}
+\SetMathAlphabet{\mathsfit}{bold}{\encodingdefault}{\sfdefault}{bx}{}
+
+
+\usepackage{color}
+\lstset{language=R,basicstyle=\ttfamily,breaklines=true,
+                keywordstyle=\color{blue}\ttfamily,
+                stringstyle=\color{red}\ttfamily,
+                commentstyle=\color{magenta}\ttfamily,
+                showstringspaces=false,
+                }
+
+\newcommand*\widefbox[1]{\fbox{\hspace{2em}#1\hspace{2em}}}
+\newcommand*\mb{\mathbf}
+\newcommand*\reals{\mathbb{R}}
+\newcommand*\complex{\mathbb{C}}
+\newcommand*\naturals{\mathbb{N}}
+\newcommand*\nats{\naturals}
+\newcommand*\integers{\mathbb{Z}}
+\newcommand*\rationals{\mathbb{Q}}
+\newcommand*\irrationals{\mathbb{J}}
+\newcommand*\pd{\partial}
+\newcommand*\htab{\hspace{4 mm}}
+\newcommand*\vtab{\vspace{0.5 in}}
+\newcommand*\lsent{\mathcal{L}}
+\newcommand*\conj{\overline}
+\newcommand*\union{\cup}
+\newcommand*\intersect{\cap}
+\newcommand*\cl{\cancel}
+\newcommand*\ANS{\text{ANS}}
+\newcommand*\As{\text{As}}
+\newcommand*\then{\rightarrow}
+\newcommand*\elim{\text{E}}
+\newcommand*\intro{\text{I}}
+\newcommand*\absurd{\curlywedge}
+\newcommand*\NK{\vdash_{\text{NK}}}
+\newcommand*\derivation{\begin{tabular} { >{$}l<{$}  >{$}c<{$}  >{$}l<{$}  >{$}r<{$} }}
+\newcommand*\interp{\mathcal{I}}
+\newcommand*\ba{\[ \begin{aligned}}
+\newcommand*\ea{\end{aligned} \]}
+\newcommand*\C{\mathcal{C}}
+\newcommand*\D{\mathscr{D}}
+\newcommand*\e{\operatorname{e}}
+\newcommand*\df{=_{\text{def}}}
+\newcommand*\eps{\epsilon}
+\newcommand*\enum{\begin{enumerate}[label=(\alph*)]}
+\newcommand*\enumend{\end{enumerate}}
+\newcommand*\E[1]{\mathsf{E}\left[#1\right]}
+\newcommand*\Esub[2]{\mathsf{E}_{#1}\left[#2\right]}
+\newcommand*\Var[1]{\mathsf{Var}\left[#1\right]}
+\newcommand*\Cov[1]{\mathsf{Cov}\left[#1\right]}
+\newcommand*\iid{\overset{\text{iid}}{\sim}}
+\newcommand*\Exp[1][\lambda]{\text{Exp}(\text{rate}=#1)}
+\newcommand*\ind[2]{I_{({#1}, {#2})} }
+\newcommand*\set[1]{\left\{#1\right\}}
+\newcommand*\estim[1]{\widehat{#1}}
+\newcommand*\der{\text{d}}
+\newcommand*\norm[1]{\left\|#1\right\|}
+\newcommand*\dist[2]{\;\text{dist}\left(#1, #2\right)}
+\newcommand*\interior{\text{int}\;}
+\newcommand*\exterior{\text{ext}\;}
+\newcommand*\boundary{\text{bd}\;}
+\newcommand*\lh{\overset{\text{L'H}}{=}}
+
+\renewcommand\Re{\operatorname{Re}}
+\renewcommand\Im{\operatorname{Im}}
+\DeclareMathOperator*{\argmin}{arg\;min}
+\renewcommand\;{\,}
+\renewcommand\epsilon{\varepsilon}
+\renewcommand\rho{\varrho}
+\renewcommand\phi{\varphi}
+\renewcommand\mod{\hspace{0.2em} \textbf{mod}\hspace{0.2em}}
+\renewcommand\Pr[1]{ \mathsf{Pr}\left(#1\right)}
+\def\ci{\perp\!\!\!\perp}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes,arrows}
+\usepackage{adjustbox}
+
+\tikzstyle{decision} = [diamond, draw, fill=blue!20, 
+    text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{block} = [rectangle, draw, fill=blue!20, 
+    text width=6em, text centered, rounded corners, minimum height=4em]
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=3cm,
+    minimum height=2em]
+
+\lstset{breaklines=true,
+        numbersep=5pt,
+        xleftmargin=.25in,
+        xrightmargin=.25in}
+
+\DeclareMathOperator{\sech}{sech}
+\DeclareMathOperator{\sgn}{sgn}
+\makeatletter
+\renewcommand*\env@matrix[1][*\c@MaxMatrixCols c]{%
+  \hskip -\arraycolsep
+  \let\@ifnextchar\new@ifnextchar
+  \array{#1}}
+\makeatother
+
+\newenvironment{amatrix}[1]{%
+  \left(\begin{array}{@{}*{#1}{c}|c@{}}
+}{%
+  \end{array}\right)
+}
+
+\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true}
+
+
+\newcommand{\real}{\ensuremath{\mathbb{R}}}
+\newcommand{\bA}{\mbox{\protect\boldmath $A$}}
+\newcommand{\bo}{\mbox{\protect\boldmath $o$}}
+\newcommand{\bu}{\mbox{\protect\boldmath $u$}}
+\newcommand{\by}{\mbox{\protect\boldmath $y$}}
+\newcommand{\bx}{\mbox{\protect\boldmath $x$}}
+\newcommand{\bs}{\mbox{\protect\boldmath $s$}}
+\newcommand{\bS}{\mbox{\protect\boldmath $S$}}
+\newcommand{\bz}{\mbox{\protect\boldmath $z$}}
+\newcommand{\bh}{\mbox{\protect\boldmath $h$}}
+\newcommand{\bF}{\mbox{\protect\boldmath $f$}}
+\newcommand{\bt}{\mbox{\protect\boldmath $t$}}
+\newcommand{\bc}{\mbox{\protect\boldmath $c$}}
+\newcommand{\bC}{\mbox{\protect\boldmath $C$}}
+\newcommand{\bV}{\mbox{\protect\boldmath $V$}}
+\newcommand{\bX}{\mbox{\protect\boldmath $X$}}
+\newcommand{\bW}{\mbox{\protect\boldmath $W$}}
+\newcommand{\bZ}{\mbox{\protect\boldmath $Z$}}
+\newcommand{\bof}{\mbox{\protect\boldmath $f$}}
+\newcommand{\indicator}{{\ensuremath{\mathbb{I}}}}
+\newcommand{\M}{{\ensuremath{\rm M}}}
+\newcommand{\bbeta}{\boldsymbol{\beta}}
+\newcommand{\balpha}{\boldsymbol{\alpha}}
+\newcommand{\bgamma}{\boldsymbol{\gamma}}
+\newcommand{\bdelta}{\boldsymbol{\delta}}
+\newcommand{\btheta}{\boldsymbol{\theta}}
+\newcommand{\bzero}{\mathbf{0}}
+\newcommand{\hsp}{\hspace{0.2mm}}
+
+\footnotesize
+
+\beamertemplatenavigationsymbolsempty
+\setbeamertemplate{headline}{\vskip2pt}
+
+\title[]{T cell receptor repertoire comparison and motif discovery via optimal transport}
+
+\author[]
+{Branden Olson Steele}
+
+\date[July 17, 2020]
+{July 17, 2020}
+
+\institute[]
+{
+Department of Computational Biology
+\\
+Fred Hutchinson Cancer Research Center
+}
+
+\AtBeginSection[]
+{
+   \begin{frame}
+       \frametitle{Outline}
+       \tableofcontents[currentsection]
+   \end{frame}
+}
+
+\expandafter\def\expandafter\insertshorttitle\expandafter{%
+  \insertshorttitle\hspace{22em}%
+  \insertframenumber}
+
+\begin{document}
+
+\begin{frame}[noframenumbering]
+  \titlepage
+\end{frame}
+
+\begin{frame}\frametitle{About me}
+\begin{minipage}{0.49\linewidth}
+\begin{itemize}
+\item PhD candidate in Statistics at UW
+\bigskip
+\item Research associate for Erick Matsen at the Fred Hutch
+\bigskip
+\item Interests: Adaptive immune receptor repertoire analysis and comparison
+\end{itemize}
+\end{minipage}
+\begin{minipage}{0.45\linewidth}
+\begin{center}
+\includegraphics[width=0.8\linewidth]{/Users/branden.olson/Downloads/BrandenTelluride.png}
+\end{center}
+\end{minipage}
+\end{frame}
+
+\begin{frame}\frametitle{T cell receptors (TCRs)}
+\begin{center}
+\includegraphics[width=0.6\linewidth]{Images/TCR.png}
+\end{center}
+\end{frame}
+
+
+\begin{frame}\frametitle{TCR distributions}
+\begin{center}
+\includegraphics[width=0.6\linewidth]{Images/transport-cartoon.png}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{TCR repertoire comparison}
+\begin{itemize}
+\bigskip
+\item
+But comparing (and even visualizing) TCR distributions not quite straightforward...
+\end{itemize}
+\begin{center}
+\includegraphics[width=0.8\linewidth]{Images/TCRRepertoire.png}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{Let's use distances}
+\begin{itemize}
+\item
+Use distances between TCRs to help inform distribution comparisons
+\bigskip
+\item
+Optimal transport is a nice way to do this
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{Problem: Dispatching soldiers}
+\begin{center}
+\includegraphics[width=0.8\linewidth]{Images/soldiers.png}
+\end{center}
+{\scriptsize * Figure credit: Drs. Marco Cuturi and Justin Solomon}
+\end{frame}
+
+\begin{frame}\frametitle{Problem: Dispatching soldiers}
+\begin{center}
+\includegraphics[width=0.8\linewidth]{Images/soldiers_as_OT.png}
+\end{center}
+{\scriptsize * Figure credit: Drs. Marco Cuturi and Justin Solomon}
+\end{frame}
+
+\begin{frame}\frametitle{Analogy to TCRs}
+\begin{center}
+\includegraphics[width=\linewidth]{Images/TCR_soldier_rep_1.png}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{Analogy to TCRs}
+\begin{center}
+\includegraphics[width=\linewidth]{Images/TCR_soldier_rep_2.png}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{Analogy to TCRs}
+\begin{center}
+\includegraphics[width=0.9\linewidth]{Images/TCR_soldier_mapping.png}
+\end{center}
+How to map TCRs in {\color{Orange} repertoire 1} to TCRs in {\color{Purple} repertoire 2} using the least "effort"?
+\end{frame}
+
+\begin{frame}\frametitle{Analogy to TCRs}
+\begin{center}
+\includegraphics[width=0.9\linewidth]{Images/TCR_soldier_mapping.png}
+\begin{itemize}
+\item[]
+Low effort $\implies$ very similar distributions 
+\item[]
+High effort $\implies$ very different distributions 
+\end{itemize}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\includegraphics[width=0.7\linewidth]{Images/TCRdist.png}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{Workflow}
+\begin{center}
+\includegraphics[width=\linewidth]{Images/ot_workflow.png}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{What we're doing}
+Goal: identify ``lonely'' TCR regions of a target repertoire ${\color{Purple} R_2}$  with respect to a reference repertoire ${\color{Orange} R_1}$
+\bigskip
+\begin{itemize}
+\item
+I.e., TCRs that are typical of their own repertoire but not of the other
+\end{itemize}
+\begin{center}
+\includegraphics[width=0.5\linewidth]{Images/transport-cartoon.png}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{Effort and loneliness}
+Score via total ``effort'' within a TCRdist-ball of a given TCR:
+\medskip
+\begin{align*}
+\text{PairedEffort}({\color{Orange} t_1} , {\color{Purple} t_2}) & := {\color{Cyan} \mathbf P_\text{optimal}}({\color{Orange} t_1} , {\color{Purple} t_2}) {\color{Green}  \text{TCRdist}}({\color{Orange} t_1} , {\color{Purple} t_2}) \\[20pt]
+\text{TotalEffort}({\color{Purple} t_2} \mid {\color{Orange} R_1}) & := \sum_{{\color{Orange} t_1} \in {\color{Orange} R_1}} \text{PairedEffort}({\color{Orange} t_1} , {\color{Purple} t_2}) \\[10pt]
+\text{Loneliness}({\color{Purple} t_2}\mid {\color{Orange} R_1}) & := \sum_{ \text{neighbors } {\color{Purple} n} \text{ of } {\color{Purple} t_2}} \text{TotalEffort}({\color{Purple} n} \mid {\color{Orange} R_1})
+\end{align*}
+\end{frame}
+
+
+\begin{frame}\frametitle{Data}
+\begin{itemize}
+\item
+TCR$\beta$ sequences from 23 mouse subjects
+\bigskip
+\item
+Two groups of sequences per mouse:
+\medskip
+\begin{itemize}
+\item
+Double negative (DN) repertoire
+\medskip
+\item
+CD4$^+$ repertoire
+\end{itemize}
+\bigskip
+\item
+23 DN + 23 CD4$^+$ = 46 total repertoire datasets
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Experimental setup}
+\begin{itemize}
+\item
+Consider an aribtrary DN repertoire $R$
+\bigskip
+\item
+Call all other DN repertoires the {\em background set}, $\mathcal B(R)$
+\bigskip
+\item
+Call all CD4$^+$ repertoires the {\em foreground set}, $\mathcal F(R)$
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Foreground/background scores}
+Then we can score each TCR $t \in R$ according to their average loneliness w.r.t. either $\mathcal B(R)$ or $\mathcal F(R)$:
+\bigskip
+\begin{itemize}
+\item
+fg-score$(t) =$ average loneliness of $t$ over the foreground set
+\bigskip
+\item
+bg-score$(t) =$ average loneliness of $t$ over the background set
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{MDS score viz, subject 15}
+\Wider{
+\begin{center}
+\includegraphics[width=\linewidth]{Images/DN_15_B.pdf}
+\end{center}
+}
+\tiny 
+\begin{itemize}
+\item
+Revere: GT[VI]SNERLFF
+\item
+Tremont: TRBV16, DWG
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{MDS score viz, subject 12}
+\Wider{
+\begin{center}
+\includegraphics[width=\linewidth]{Images/DN_12_B.pdf}
+\end{center}
+}
+\tiny 
+\begin{itemize}
+\item
+Revere: GT[VI]SNERLFF
+\item
+Tremont: TRBV16, DWG
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Clustering}
+We came up with a clustering routine that:
+\bigskip
+\begin{itemize}
+\item
+finds the lonelinest TCR in each iteration
+\bigskip
+\item
+computes a TCRdist ball of similarly lonely TCRs around it
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Automatic motif specification}
+Instead of regex-based motifs, we can infer a sequence profile
+\bigskip
+\begin{itemize}
+\item
+We use HMMer to infer a profile-HMM $\pi$
+\bigskip
+\item
+Can score how well any other sequence $s$ ``belongs'' to $\pi$ (i.e., matches its profile)
+\bigskip
+\item
+If this score is higher than some threshold, say it has this motif
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{Ida sequence logo}
+\begin{center}
+\includegraphics[width=\linewidth]{Images/ida_sequence_logo.png}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{Score viz with Ida, subject 12}
+\Wider{
+\begin{center}
+\includegraphics[width=\linewidth]{Images/dn_12_with_ida.pdf}
+\end{center}
+}
+\end{frame}
+
+\begin{frame}\frametitle{Score viz with Ida, subject 15}
+\Wider{
+\begin{center}
+\includegraphics[width=\linewidth]{Images/dn_15_with_ida.pdf}
+\end{center}
+}
+\end{frame}
+
+\begin{frame}\frametitle{Prevalence by motif}
+\begin{center}
+\includegraphics[width=\linewidth]{Images/motif_prevalence_fg.pdf}
+\end{center}
+\begin{itemize}
+\item
+Prevalence(motif) = observed frequency of motif 
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{ECDF by motif}
+\begin{center}
+\includegraphics[width=\linewidth]{Images/ecdf_by_motif.pdf}
+\end{center}
+\begin{itemize}
+\item
+High ECDF = loneliness is high relative to other observed values
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Familiar faces}
+\begin{center}
+\includegraphics[width=0.6\linewidth]{Images/revere_logo.png}
+\\
+\includegraphics[width=0.6\linewidth]{Images/tremont_logo.png}
+\end{center}
+\end{frame}
+
+
+\begin{frame}\frametitle{Next steps}
+\begin{itemize}
+\item
+Applying methods to yellow fever virus (human) datasets
+\bigskip
+\item
+Validation that does not rely on TCRdist
+\begin{itemize}
+\bigskip
+\item
+Can we show that our lonely clusters have some biological significance?
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{Acknowledgments}
+\begin{minipage}{0.49\linewidth}
+\begin{center}
+Erick Matsen
+\\
+\includegraphics[width=0.8\linewidth]{Images/Erick.jpeg}
+\end{center}
+\end{minipage}
+\begin{minipage}{0.49\linewidth}
+\begin{center}
+Phil Bradley
+\\
+\includegraphics[width=0.65\linewidth]{Images/Phil.jpg}
+\end{center}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{References}
+\small
+\begin{itemize}
+\item[]
+Cuturi M (2013). Sinkhorn distances: lightspeed computation of optimal transportation distances. {\em Advances in Neural Information Processing Systems}, \textbf{26}:2292--2300. arXiv:1306.0895
+\bigskip
+\item[]
+Dash P, Fiore-Gartland AJ, Hertz T, et al. (2017). Quantifiable predictive features define epitope-specific T cell receptor repertoires. {\em Nature}, \textbf{547}(7661):89--93. doi:10.1038/nature22383
+\bigskip
+\item[]
+Flamary R and Courty N (2017). POT Python Optimal Transport library,
+Website: https://pythonot.github.io/.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\Huge
+Questions?
+\end{center}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\includegraphics[width=0.5\linewidth]{Images/shield.png}
+\end{center}
+\end{frame}
+
+
+\begin{frame}\frametitle{TCRdist stuff}
+\begin{itemize}
+\item
+BLOSUM62: widely-used substitution (similarity) matrix for amino acids that was estimated using log odds scoring of frequencies from a large and trusted alignment database (called BLOCKS).
+\bigskip
+\item
+CDR2.5: a loop between CDR2 and CDR3 (IMGT positions 81-86) that has been observed to make
+contacts with pMHC in solved structures
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}\frametitle{TCRdist [Dash et al. '17]}
+\begin{align}
+\text{TCRdist}(r_1, r_2)
+	& := \sum_{p \in \text{{\color{ProcessBlue} CDR positions}}} 
+		\sum_{(a_1, a_2) \in p}
+		{\color{Orange} w}(p) 
+		\text{{\color{Green} AAdist}}(a_1, a_2; p)
+\end{align}
+
+where:
+\footnotesize
+\begin{itemize}
+\item
+$\text{{\color{ProcessBlue} CDR positions}} 
+	:= \{\text{CDR1}\alpha, \text{CDR2}\alpha, \text{CDR2.5}\alpha, 
+		\text{CDR3}\alpha,
+		 \text{CDR1}\beta, \text{CDR2}\beta, \text{CDR2.5}\beta, \text{CDR3}\beta\}$
+\item 
+$ {\color{Orange} w}(p) := \begin{cases} 3, & p \in \{\text{CDR3}\alpha, \text{CDR3}\beta\} \\
+						1, & \text{else}
+		\end{cases}$
+\item
+$ \text{{\color{Green} AAdist}}(a_1, a_2; p) := 
+\begin{cases}
+	0, & a_1 = a_2 \\
+	8, & a_1 = \text{`}\texttt{-}\text{'} \oplus a_2 = \text{`}\texttt{-}\text{'}, 
+		\ p \in \{\text{CDR3}\alpha, \text{CDR3}\beta\} \\
+	4, & a_1 = \text{`}\texttt{-}\text{'} \oplus a_2 = \text{`}\texttt{-}\text{'}, 
+		\ p \not\in \{\text{CDR3}\alpha, \text{CDR3}\beta\} \\
+
+	4 - \min(0,  \text{{\color{Purple} BLOSUM62}}(a_1, a_2)), & \text{else} 
+\end{cases}$ 
+\item
+{\color{Purple} BLOSUM62}: widely-used AA substitution matrix
+[Henikoff '92]
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Determining lonely clusters}
+\begin{itemize}
+\item
+Start with lonelinest TCR $t \in R$
+\bigskip
+\item
+Compute annuli around $t$ based on increasing TCRdist values
+\bigskip
+\item
+Compute the mean loneliness over each annulus
+\bigskip
+\item
+Identify a "breakpoint" radius $r_b$ where loneliness stabilizes
+\bigskip
+\item
+Define cluster as $\set{t': \text{TCRdist}(t, t') < r_b}$
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Breakpoint detection via segmented regression}
+\Wider{
+\begin{center}
+\includegraphics[width=\linewidth]{Images/enrichment_by_radius.pdf}
+\end{center}
+}
+\end{frame}
+
+\begin{frame}\frametitle{Typical use case}
+\begin{itemize}
+\item
+With many biological replicates, can get a ``null'' distribution for significance estimates
+\bigskip
+\item
+Typical use case: Have 2 repertoires, want to know significantly lonely TCRs
+\bigskip
+\item
+Solution: repeatedly randomize dataset labels for a null distribution
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Z-scores for randomization vs replicate null}
+\begin{center}
+\includegraphics[width=0.75\linewidth]{Images/z_score_scatterplot.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{Z-scores for randomization vs replicate null}
+\begin{center}
+\includegraphics[width=0.75\linewidth]{Images/z_score_densities.pdf}
+\end{center}
+\end{frame}
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

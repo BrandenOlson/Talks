@@ -39,6 +39,16 @@
 \usepackage{booktabs}
 \usepackage{algorithm, algorithmic}
 
+\usepackage{lipsum}
+
+\newcommand\Wider[2][3em]{%
+\makebox[\linewidth][c]{%
+  \begin{minipage}{\dimexpr\textwidth+#1\relax}
+  \raggedright#2
+  \end{minipage}%
+  }%
+}
+
 \DeclareMathAlphabet{\mathcal}{OMS}{cmsy}{m}{n}
 
 \DeclareMathAlphabet{\mathsfit}{\encodingdefault}{\sfdefault}{m}{}
@@ -186,13 +196,13 @@
 \beamertemplatenavigationsymbolsempty
 \setbeamertemplate{headline}{\vskip2pt}
 
-\title[]{Statistical methods for adaptive immune receptor repertoire analysis and comparison}
+\title[]{T cell receptor repertoire comparison and motif discovery via optimal transport}
 
 \author[]
-{Branden Olson}
+{Branden Olson Steele}
 
-\date[Feb. 28, 2020]
-{February 28, 2020}
+\date[Jun 5, 2020]
+{June 5, 2020}
 
 \institute[]
 {
@@ -219,28 +229,28 @@ University of Washington Seattle
   \titlepage
 \end{frame}
 
+\begin{frame}\frametitle{Cooking fun}
+\includegraphics[width=0.8\linewidth]{Images/homity_pie.jpg}
+
+\includegraphics[width=0.8\linewidth]{Images/halloumi.jpg}
+\end{frame}
+
 \section{Introduction to T cell receptors}
 
-\begin{frame}\frametitle{TCRs, cont.}
+\begin{frame}\frametitle{T cell receptors (TCRs)}
 \begin{center}
 \includegraphics[width=0.6\linewidth]{Images/TCR.png}
 \end{center}
 \end{frame}
 
-\begin{frame}\frametitle{BCRs and TCRs}
+\begin{frame}\frametitle{TCRs and BCRs}
 \begin{center}
 \includegraphics[width=0.5\linewidth]{Images/bcr_tcr.png}
 \end{center}
 \end{frame}
 
 
-\begin{frame}\frametitle{The formation of BCRs (TCRs are simpler)}
-\begin{center}
-\includegraphics[width=\linewidth]{Images/BCRFormation.png}
-\end{center}
-\end{frame}
-
-\begin{frame}\frametitle{Adaptive immune receptor repertoires}
+\begin{frame}\frametitle{TCR repertoires}
 \begin{itemize}
 \item[]
 A TCR \emph{repertoire} is the collection of TCRs in an individual at a given moment
@@ -250,19 +260,18 @@ This changes in time
 \bigskip
 \item[]
 Can sample via high-throughput sequencing
-\medskip
-\begin{itemize}
-\item
-We call these samples AIRR-seq (\textbf{A}daptive \textbf{I}mmune \textbf{R}eceptor \textbf{R}epertoire \textbf{seq}uence) datasets
 \end{itemize}
-\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{TCR distributions}
+\begin{center}
+\includegraphics[width=0.6\linewidth]{Images/transport-cartoon.png}
+\end{center}
 \end{frame}
 
 \begin{frame}\frametitle{TCR repertoire comparison}
 \begin{itemize}
-\bigskip
-\item
-Often, immunologists wish to compare distributions of repertoires
 \bigskip
 \item
 But comparing (and even visualizing) TCR distributions not quite straightforward...
@@ -272,11 +281,6 @@ But comparing (and even visualizing) TCR distributions not quite straightforward
 \end{center}
 \end{frame}
 
-\begin{frame}\frametitle{TCR distributions}
-\begin{center}
-\includegraphics[width=0.6\linewidth]{Images/transport-cartoon.png}
-\end{center}
-\end{frame}
 
 \begin{frame}\frametitle{Why is this difficult?}
 \begin{itemize}
@@ -301,7 +305,7 @@ Idea: equip TCRs with a similarity metric
 Use distances to inform distribution comparisons
 \bigskip
 \item
-Optimal transport is a class of methods to do this
+Optimal transport does this
 \bigskip
 \begin{itemize}
 \item
@@ -331,11 +335,35 @@ Not the only such class (discrepancy/Prokhorov metrics) ...
 {\scriptsize * Figure credit: Drs. Marco Cuturi and Justin Solomon}
 \end{frame}
 
-\begin{frame}\frametitle{Problem: Moving dirt}
-How can we fill up the hole using the smallest amount of "effort"?
-\bigskip
-\includegraphics[width=\linewidth]{Images/EMD_shovel.png}
-{\scriptsize * Photo credit: Dr. Marco Cuturi}
+\begin{frame}\frametitle{Analogy to TCRs}
+\begin{center}
+\includegraphics[width=\linewidth]{Images/TCR_soldier_rep_1.png}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{Analogy to TCRs}
+\begin{center}
+\includegraphics[width=\linewidth]{Images/TCR_soldier_rep_2.png}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{Analogy to TCRs}
+\begin{center}
+\includegraphics[width=0.9\linewidth]{Images/TCR_soldier_mapping.png}
+\end{center}
+How to map TCRs in {\color{Orange} repertoire 1} to TCRs in {\color{Purple} repertoire 2} using the least "effort"?
+\end{frame}
+
+\begin{frame}\frametitle{Analogy to TCRs}
+\begin{center}
+\includegraphics[width=0.9\linewidth]{Images/TCR_soldier_mapping.png}
+\begin{itemize}
+\item[]
+Low effort $\implies$ very similar distributions 
+\item[]
+High effort $\implies$ very different distributions 
+\end{itemize}
+\end{center}
 \end{frame}
 
 \begin{frame}\frametitle{Optimal transport}
@@ -345,38 +373,30 @@ The field of optimal transport solves these types of problems
 \bigskip
 \item
 Just need a {\color{Green} distance} ($\equiv$ cost) function 
-${\color{Green} d}:\mathcal{X} \times \mathcal{Y} \to \reals^+$ for {\color{Purple} moving} objects around
+${\color{Green} d}:\mathcal{X} \times \mathcal{Y} \to \reals^+$ for {\color{Cyan} moving} objects around
 \bigskip
 \item
-Optimizations of the form
-\begin{align}
-	\ & \min_{{\color{violet} \pi} \in \text{couplings}({\color{red} \mu}, {\color{blue} \nu})} 
-		\int_{\mathcal X \times \mathcal Y} 
-		{\color{Green} d}(x, y) \der {\color{violet} \pi}(x, y) \\
-	\equiv & \min_{{\color{violet} \pi} \in 
-		\text{couplings}({\color{red} \mu}, {\color{blue} \nu})}
-		 \Esub{(X, Y) \sim {\color{violet} \pi}}{ {\color{Green} d}(X, Y) }
-\end{align}
-\smallskip
+Result: a matrix ${\color{Cyan} \mathbf P}$ describing how to move/allocate objects according to distance matrix ${\color{Green} \mathbf D}$
+\bigskip
 \item
 Modern techniques approximate this solution very fast (like, linearly!)
 \end{itemize}
 \end{frame}
 
+\section{Effort and loneliness}
 
 \begin{frame}\frametitle{TCR distances}
 \begin{itemize}
 \item
-Need a distance between TCRs to apply these methods
+To define ${\color{Green} \mathbf D}$, need a distance between TCRs
 \bigskip
 \item
-Very much a research question
+Nontrivial research question
 \bigskip
 \item
 Dash et al. (2017) introduce a TCR distance based on amino acid differences between TCR subregions
 \end{itemize}
 \end{frame}
-
 
 \begin{frame}
 \begin{center}
@@ -384,10 +404,16 @@ Dash et al. (2017) introduce a TCR distance based on amino acid differences betw
 \end{center}
 \end{frame}
 
+\begin{frame}\frametitle{Workflow}
+\begin{center}
+\includegraphics[width=\linewidth]{Images/ot_workflow.png}
+\end{center}
+\end{frame}
+
 \begin{frame}\frametitle{What we're doing}
 \begin{itemize}
 \item
-Goal: identify ``lonely'' TCRs with respect to another repertoire
+Goal: identify ``lonely'' TCR regions with respect to another repertoire
 \medskip
 \begin{itemize}
 \item
@@ -398,41 +424,253 @@ I.e., TCRs that are typical of their own repertoire but not of another
 Score via total ``effort'' within a TCRdist-ball of a given TCR:
 \medskip
 \ba
-\text{Effort}(t_1, t_2) & := \pi_\text{optimal}(t_1, t_2) \text{TCRdist}(t_1, t_2) \\
-\text{Loneliness}(t \in R_2 | R_1) & := \sum_{n \in \text{neighbors}(t)} \sum_{t' \in R_1}  \text{Effort}(t', n) 
+\text{Effort}({\color{Orange} t_1} \in {\color{Orange} R_1}, {\color{Purple} t_2} \in {\color{Purple} R_2}) & := {\color{Cyan} \mathbf P_\text{optimal}}({\color{Orange} t_1} , {\color{Purple} t_2}) {\color{Green} \mathbf D}({\color{Orange} t_1} , {\color{Purple} t_2}) \\
 \ea
+\ba
+\text{Loneliness}({\color{Purple} t_2} \in {\color{Purple} R_2} \mid {\color{Orange} R_1}) & := \sum_{{\color{Purple} n} \in \text{neighbors}({\color{Purple} t_2})} \sum_{{\color{Orange} t_1} \in {\color{Orange} R_1}}  \text{Effort}({\color{Orange} t_1} , {\color{Purple} n}) 
+\ea
+\end{itemize}\end{frame}
+
+\section{Validation using biological replicates}
+
+\begin{frame}\frametitle{Data}
+\begin{itemize}
 \item
-Validate these scores using sets of repertoires from similar or different cell types
+TCR$\beta$ sequences from 23 mouse subjects
+\bigskip
+\item
+Two groups of sequences per mouse:
+\medskip
+\begin{itemize}
+\item
+Double negative (DN) repertoire
+\medskip
+\item
+CD4$^+$ repertoire
+\end{itemize}
+\bigskip
+\item
+23 DN + 23 CD4$^+$ = 46 total repertoire datasets
 \end{itemize}
 \end{frame}
 
-\section{Conclusion}
+\begin{frame}\frametitle{Experimental setup}
+\begin{itemize}
+\item
+Consider an aribtrary DN repertoire $R$
+\bigskip
+\item
+Call all other DN repertoires the {\em background set}, $\mathcal B(R)$
+\bigskip
+\item
+Call all CD4$^+$ repertoires the {\em foreground set}, $\mathcal F(R)$
+\end{itemize}
+\end{frame}
 
-\begin{frame}\frametitle{Discussion}
+\begin{frame}\frametitle{Foreground/background scores}
+Then we can score each TCR $t \in R$ according to their average loneliness w.r.t. either $\mathcal B(R)$ or $\mathcal F(R)$:
+\bigskip
+\ba
+\text{fg-score}(t \in R) = \frac{1}{\left|\mathcal F(R)\right|} \sum_{R_\text{fg} \in \mathcal F(R)} \text{Loneliness}\left(t \mid R_\text{fg}\right)
+\ea
+
+\ba
+\text{bg-score}(t \in R) = \frac{1}{\left|\mathcal B(R)\right|} \sum_{R_\text{bg} \in \mathcal B(R)} \text{Loneliness}\left(t \mid R_\text{bg}\right)
+\ea
+\end{frame}
+
+\begin{frame}\frametitle{Expectations}
+\begin{itemize}
+\item
+For a given TCR $t$, $\text{fg-score}(t) \ge \text{bg-score}(t)$
+\bigskip
+\item
+Lonely TCRs tend to cluster into groups
+\bigskip
+\item
+Loneliness scores tend to have similar dynamics across replicates
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{MDS score viz, subject 15}
+\Wider{
 \begin{center}
-\includegraphics[width=0.35\linewidth]{Images/tm_bound.png}
+\includegraphics[width=\linewidth]{Images/DN_15_B.pdf}
 \end{center}
-\vspace{2em}
+}
+\tiny 
+\begin{itemize}
+\item
+Revere: GT[VI]SNERLFF
+\item
+Tremont: TRBV16, DWG
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{MDS score viz, subject 12}
+\Wider{
 \begin{center}
-\includegraphics[width=0.3\linewidth]{Images/sumrep_logo.png}
-\hspace{6em}
-\includegraphics[width=0.25\linewidth]{Images/transport-cartoon.png}
+\includegraphics[width=\linewidth]{Images/DN_12_B.pdf}
+\end{center}
+}
+\tiny 
+\begin{itemize}
+\item
+Revere: GT[VI]SNERLFF
+\item
+Tremont: TRBV16, DWG
+\end{itemize}
+\end{frame}
+
+\section{Automatic motif discovery}
+
+\begin{frame}\frametitle{Determining lonely clusters}
+\begin{itemize}
+\item
+Start with lonelinest TCR $t \in R$
+\bigskip
+\item
+Compute annuli around $t$ based on increasing TCRdist values
+\bigskip
+\item
+Compute the mean loneliness over each annulus
+\bigskip
+\item
+Identify a "breakpoint" radius $r_b$ where loneliness stabilizes
+\bigskip
+\item
+Define cluster as $\set{t': \text{TCRdist}(t, t') < r_b}$
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Breakpoint detection via segmented regression}
+\Wider{
+\begin{center}
+\includegraphics[width=\linewidth]{Images/enrichment_by_radius.pdf}
+\end{center}
+}
+\end{frame}
+
+
+\begin{frame}\frametitle{Automatic motif specification}
+\begin{itemize}
+\item[]
+One could attempt to construct a regex-based motif over this cluster
+\bigskip
+\begin{itemize}
+\item
+i.e., gene = "TRBV(16|12)" and CDR3 includes "Y*A*EQ[YF]F"
+\end{itemize}
+\bigskip
+\item[]
+Instead, let's infer a sequence profile
+\bigskip
+\begin{itemize}
+\item
+We use HMMer to infer a profile-HMM $\pi$
+\bigskip
+\item
+Can score how well any other sequence $s$ ``belongs'' to $\pi$ (i.e., matches its profile)
+\bigskip
+\item
+If this score is higher than some threshold, say it has this motif
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{Ida sequence logo}
+\begin{center}
+\includegraphics[width=\linewidth]{Images/ida_logo.png}
 \end{center}
 \end{frame}
+
+\begin{frame}\frametitle{Score viz with Ida, subject 12}
+\Wider{
+\begin{center}
+\includegraphics[width=\linewidth]{Images/dn_12_with_ida.pdf}
+\end{center}
+}
+\end{frame}
+
+\begin{frame}\frametitle{Score viz with Ida, subject 15}
+\Wider{
+\begin{center}
+\includegraphics[width=\linewidth]{Images/dn_15_with_ida.pdf}
+\end{center}
+}
+\end{frame}
+
+\begin{frame}\frametitle{Prevalence by motif}
+\begin{center}
+\includegraphics[width=\linewidth]{Images/motif_prevalence_fg.pdf}
+\end{center}
+\begin{itemize}
+\item
+Prevalence(motif) = observed frequency of motif 
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{ECDF by motif}
+\begin{center}
+\includegraphics[width=\linewidth]{Images/ecdf_by_motif.pdf}
+\end{center}
+\begin{itemize}
+\item
+High ECDF = loneliness is high relative to other observed values
+\end{itemize}
+\end{frame}
+
+\section{Significance estimates}
+
+\begin{frame}\frametitle{Typical use case}
+\begin{itemize}
+\item
+With many biological replicates, can get a ``null'' distribution for significance estimates
+\bigskip
+\item
+Typical use case: Have 2 repertoires, want to know significantly lonely TCRs
+\bigskip
+\item
+Solution: repeatedly randomize dataset labels for a null distribution
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Z-scores for randomization vs replicate null}
+\begin{center}
+\includegraphics[width=0.75\linewidth]{Images/z_score_scatterplot.pdf}
+\end{center}
+\end{frame}
+
+\section{Discussion}
+
+\begin{frame}\frametitle{Next steps}
+\begin{itemize}
+\item
+Apply methods to new datasets
+\bigskip
+\item
+Can we extract lonely clusters that have biological significance?
+\bigskip
+\item
+Validation that does not rely on TCRdist
+\end{itemize}
+\end{frame}
+
 
 \begin{frame}\frametitle{Acknowledgments}
 \begin{minipage}{0.49\linewidth}
 \begin{center}
 Erick Matsen
 \\
-\includegraphics[width=0.5\linewidth]{Images/Erick.jpeg}
+\includegraphics[width=0.8\linewidth]{Images/Erick.jpeg}
 \end{center}
 \end{minipage}
 \begin{minipage}{0.49\linewidth}
 \begin{center}
 Phil Bradley
 \\
-\includegraphics[width=0.4\linewidth]{Images/Phil.jpg}
+\includegraphics[width=0.65\linewidth]{Images/Phil.jpg}
 \end{center}
 \end{minipage}
 \end{frame}
@@ -444,13 +682,11 @@ Phil Bradley
 Cuturi M (2013). Sinkhorn distances: lightspeed computation of optimal transportation distances. {\em Advances in Neural Information Processing Systems}, \textbf{26}:2292--2300. arXiv:1306.0895
 \bigskip
 \item[]
-Dale G et al. (2019). Clustered Mutations at the Murine and Human IgH Locus Exhibit Significant Linkage Consistent with Templated Mutagenesis. {\it The Journal of Immunology}, \textbf{ ji1801615}.
-\bigskip
-\item[]
 Dash P, Fiore-Gartland AJ, Hertz T, et al. (2017). Quantifiable predictive features define epitope-specific T cell receptor repertoires. {\em Nature}, \textbf{547}(7661):89--93. doi:10.1038/nature22383
 \bigskip
 \item[]
-Yeap et al. (2015). Sequence-Intrinsic Mechanisms that Target AID Mutational Outcomes on Antibody Genes. {\em Cell}, \textbf{163}(5):1124-1137. 
+Flamary R and Courty N (2017). POT Python Optimal Transport library,
+Website: https://pythonot.github.io/.
 \end{itemize}
 \end{frame}
 
@@ -476,58 +712,6 @@ BLOSUM62: widely-used substitution (similarity) matrix for amino acids that was 
 \item
 CDR2.5: a loop between CDR2 and CDR3 (IMGT positions 81-86) that has been observed to make
 contacts with pMHC in solved structures
-\end{itemize}
-\end{frame}
-
-\begin{frame}\frametitle{Problem: Moving dirt}
-Perhaps we identify a function $T$ that takes the dirt at each spot $x$ and moves it to new spot $y = T(x)$
-\bigskip
-\includegraphics[width=\linewidth]{Images/EMD_shovel.png}
-\end{frame}
-
-\begin{frame}\frametitle{Problem: Moving dirt}
-This defines a relationship between measures $\mu$ and $\nu$
-\bigskip
-\includegraphics[width=\linewidth]{Images/EMD_pushforward.png}
-\end{frame}
-
-\begin{frame}\frametitle{Pushforward mesaure}
-\begin{itemize}
-\item
-Let $\mathbf T : \mathcal X \to \mathcal Y$ be a continuous map from sample space $\mathcal X$ to sample space $\mathcal Y$.
-\item
-The pushforward operator $\mathbf T_\sharp : \mathcal M(\mathcal X) \to \mathcal M(\mathcal Y)$, which maps measures on $\mathcal X$ to measures on $\mathcal Y$, satisfies for a given measure $\mu \in \mathcal M(\mathcal X)$,
- $\forall B \subset \mathcal Y$, $B$ measurable, we have
-\begin{align}
-    \left(\mathbf T_\sharp \mu\right) (B) 
-    & = \mu\left( \{ \mathbf x \in \mathcal X : \mathbf T(\mathcal X) \in B \} \right) \\
-    & = \mu\left(\mathbf T^{-1}(B) \right)
-\end{align}
-
-In the discrete case, which will be the case for TCR repertoires, we have
-\ba
-    \mathbf T_\sharp \mu := \sum_{i=1}^n a_i \delta_{\mathbf T(\mathbf x_i)}
-\ea
-for some weights $a_1, \dotsc, a_n$. 
-\end{itemize}
-\end{frame}
-
-\begin{frame}\frametitle{}
-\begin{itemize}
-\item
-Let $\mu(\mathbf x) D(\mathbf x, \mathbf T(\mathbf x))$ be the work to move the mass at $\mathbf x$ to $\mathbf T(\mathbf x)$
-\item
-We seek the $\mathbf T$ which minimizes the total work over our domain $\mathcal X$:
-\ba
-\estim{\mathbf T }
-	& = \argmin_{\mathbf T_\sharp\mu = \nu} \int_{\mathcal X} D(\mathbf x, \mathbf T(\mathbf x)) \;\der \mu(\mathbf x)
-\ea
-\item
-This is known as Monge's problem
-\item
-This is a strict formulation and cannot be applied to most practical problems
-\item
-But, it's easy to picture and sets up the intuition for more general problems
 \end{itemize}
 \end{frame}
 
@@ -838,31 +1022,11 @@ $ \text{{\color{Green} AAdist}}(a_1, a_2; p) :=
 \end{itemize}
 \end{frame}
 
-\begin{frame}\frametitle{Initial results}
-\begin{itemize}
-\item
-Are these loneliness scores biologically plausible?
-\bigskip
-\item
-Consider 2 groups of biological replicates: group of CD4+ mice, and group of DN mice
-\bigskip
-\item
-Randomly choose a DN representative, $D$
-\medskip
-\item
-Compute score distributions for each TCR $\in D$ to each CD4+ repertoire (foreground), and every other DN repertoire (background)
-\bigskip
-\item
-Hope: foreground scores tend to be larger than background scores 
-\end{itemize}
-\end{frame}
-
-\begin{frame}\frametitle{Score ECDFs}
+\begin{frame}\frametitle{Z-scores for randomization vs replicate null}
 \begin{center}
-\includegraphics[width=\linewidth]{Images/mean_ecdfs.pdf}
+\includegraphics[width=0.75\linewidth]{Images/z_score_densities.pdf}
 \end{center}
 \end{frame}
-
 
 \end{document}
 
